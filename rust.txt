@@ -1,0 +1,709 @@
+-------------------------------------------------------
+Variables
+    by default, variables are immutable
+
+let
+    let x: i32;
+    need to be initialized...before use
+    BY default, variable is immutable
+
+mut 
+    => make a variable mutable
+    let mut x = 1;
+    
+ununsed variable warning
+    _x
+    #[warn(unused_variables)]
+    #[warn(unused_variables)]
+    
+const
+    cont PI = 3.14;
+    naming convention => all upper crates
+
+
+
+
+
+
+scope of variable
+    shadow of variable possible
+    e.g 
+    let num: = String::new();
+    let num:u32 = 1;
+
+    let x = 8;
+    {
+        let x = 12
+        assert_eq!(x, 12);
+    }
+    assert_eq!(x, 5);
+
+shadowing
+    allows variable to be re-declared in the same scope with same name
+    while shadowing, we can the data types
+    let x = 9;
+    let x = "hello";  => we changed the int type to String
+
+------------------------------------------
+result  enum
+
+
+------------------------------
+print!()   println!()
+assert_eq!()
+
+-----------------------------------------------
+
+-------------------------------------
+visual studio setup for rust projects
+https://code.visualstudio.com/docs/languages/rust
+
+
+
+rustc --version
+rustup update
+
+rustup component remove --toolchain stable <COMPONENT>...
+rustup target remove --toolchain stable <TARGET>...
+
+rls-preview
+rustup component remove --toolchain stable rls-preview...
+rustup target remove --toolchain stable <TARGET>...
+
+
+----------------------------
+crates.io
+cargo.toml 
+    => has the dependcies section 
+        gets from crates.io, compiles..
+
+        cargo.lock
+            => check in, used to produce reproducible builds
+                it has all the versions of the dependencies
+
+crate
+    binary crate    
+    library crate
++
+cargo => package manager
+creating & running new projects
+
+    cargo new directory_name
+
+    cargo check
+
+    cargo build
+    cargo build --release  
+        >> for release builds
+    
+    cargo run
+
+    cargo doc --open
+        creates documentation, including all the dependencies
+
+---------------------------------
+Data types
+Scalars => integers, floating point, numbers, booleans, characters
+
+Integral types
+
+i8      u8
+i16     u16
+i32     u32
+i64     u64
+i128    u128
+isize   usize
+
+
+let guess: u32 = "42".parse()
+--------------------------------
+floating    
+    f32     f64 (default type)
+
+char
+    4 bytes
+    unicode
+
+-----
+tuple
+
+let tup = (1, 4.2, 3)
+let (x,y, z) = tup
+
+----
+arrays
+
+let a = [1,2,3,4,5]
+
+let a = [3; 5];
+    => [3,3,3,3,3]
+
+-------------
+strings
+    while comparing strings, you need to trim()
+
+str
+    => string literal
+    let s = "Hello, world!";
+
+String  
+
+    => returning &str
+    fn first_word(s: &String) -> &str {
+
+
+----------------
+custom
+mod => inner_module
+
+pb => public.
+    can be used at different levels => module, function, data variables, enum
+
+    crate => you want to expose only at crate level
+        pub(crate) => public only at the crate level
+    
+    super
+        pub (super) => make item public to the parent module
+
+    public in specified path
+        mod a {
+            pub mod b {
+                pub(in crate::a) fn greet() {
+                    println!("Hello from b, accessible within module a!");
+                }
+            }
+        }
+    
+
+mod outer_module {
+    pub mod inner_module {
+        pub fun test() {
+
+        }
+    }
+}
+
+
+-----------------------------------------------------------------------------
+CONTOL
+
+loop {
+
+}
+
+
+labelled loops
+    using label_names in the loops
+
+    'counting_up: loop {
+        println!("count = {count}");
+        let mut remaining = 10;
+
+        loop {
+            if count == 2 {
+                break 'counting_up;
+            }
+        }
+
+    }
+
+
+while
+    while number != 0 {
+        println!("{number}!");
+
+        number -= 1;
+    }
+
+
+for
+    for element in a {
+        println!("the value is: {element}");
+    }
+
+------
+if
+    if number % 4 == 0 {
+        println!("number is divisible by 4");
+    } else if number % 3 == 0 {
+        println!("number is divisible by 3");
+    } else {
+        println!("number is not divisible by 4, 3, or 2");
+    }
+
+
+
+    let condition = true;
+    let number = if condition { 5 } else { 6 };
+
+
+
+
+
+
+match
+    something like switch statement
+
+    match guess.cmp(&secret_number) {
+            Ordering::Less => println!("too small"),
+            Ordering::Greater => println!("too big"),
+            Ordering::Equal => {
+                println!("you win");
+                break;
+            }
+        }
+
+--------------------------------------------------------------------------------
+Exceptions
+    panic is the word used
+
+-------------------------------------------------------------------------------------------------------------------------
+Functions
+
+snake_case
+
+fn test_function(age: u32, name: string)  {
+
+}
+
+//return value
+fn five() -> i32 {
+    5
+}
+
+statement & expressions
+    statement dont return any value
+        let y = 5;
+    expression return value 
+      y = {
+        let x = 4;
+        x + 1
+      };
+
+-------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------
+OWNErSHIP
+---------------------------------------------------------------------------------------------------------------------------
+heap allocation ~ 
+    analogy server in a restaurant => depending on the party allocates you different table
+
+Ownership rules
+	1) every value has an owner
+	2) there can be only one owner
+	3) when the owner goes out of scope, the value is dropped
+		drop
+
+
+=> move to another variable
+    let mut s = String::from("hello");
+    s.push_str(", world!"); // push_str() appends a literal to a String
+    println!("{s}"); // This will print `hello, world!`
+
+
+    let mut s1 = String::from("hllo..");
+    let mut s2 = s1;
+        // here the buffer is moved s1 to s2.. similar to std::move in c++
+        // compile error is throw..if we try to use s1 after assigning it to s2
+
+---
+
+deep copy
+	=> clone
+
+	Copy trait
+	=>	tuple, int, fp, Boolean, char
+
+----
+passing to a function behaves same as assigning to a variable
+
+
+transferring from function by returning the value
+
+--------------
+references
+	using a value without transferring ownership..
+
+    references  
+        => &
+
+    mutable references  
+        => &mut
+
+    more than 1 references  
+        => many readonly references can be had
+
+        => if there is a mutable &, there can be only 1 including read-only ref.
+
+---------------
+slices
+    let s = String::from("hello world");
+
+    let hello = &s[0..5]; => start and end_index
+    let world = &s[6..11];
+
+    Using slices =>    
+        fn first_word(s: &String) -> &str {
+            let bytes = s.as_bytes();
+
+            for (i, &item) in bytes.iter().enumerate() {
+                if item == b' ' {
+                    return &s[0..i];
+                }
+            }
+
+            &s[..]
+        }
+
+
+-------------
+
+Collections & iterators
+    fn first_word(s: &String) -> usize {
+        let bytes = s.as_bytes();
+
+        for (i, &item) in bytes.iter().enumerate() {
+            if item == b' ' {
+                return i;
+            }
+        }
+        s.len()
+    }
+
+---------------------------------------------------------------------------------------------------------
+struct
+
+defining struct
+
+    //data
+    struct Trade {
+        ticker: String,
+        id: u32,
+        price: f32,
+        active: bool,
+        quantity: f32,
+    }
+
+    //functions...
+    impl Trade {
+    fn total(&self) -> f32 {
+        self.price * self.quantity
+    }
+
+    //functions without &self => can be used to construct the object....   ::
+    fn trade(ticker: String, price: f32) {
+        Trade {
+            ticker : ticker,
+            price : price,
+            qua
+        }
+    }
+
+}
+
+
+
+    struct Color(i32, i32, i32);
+    let c = Color(1,2,3);
+
+#[derive(Debug)]
+    => println!("{trade  :? }");
+    => prints the object similar to toString() in java
+
+---------------------
+
+enums
+    can have different types of data
+
+    enum IPAddr {
+        V4(Ipv4Addr),
+        V6(Ipv4Addr)
+    }
+
+    impl TradeType {
+        fn call(&self) {
+            println!("TradeType enum...");
+        }
+    }
+    enum can have functions..
+
+
+    rust does not have null, but has an enum which represents null.
+
+    enum Option<T> {
+        None,
+        Some(T)
+    }
+
+//////////////////////////////////
+match
+    like switch snake_case
+
+    other / _ => default
+
+    control flows
+
+        if let (condition ) {
+
+        }
+
+
+
+        if let condition {
+
+        } else {
+
+        }
+
+////////////////////////////////////////////////////////////////
+packages, modules & crates
+
+packages
+    package is bundle of one or more crates .. contains Cargo.toml
+    contains one or more crates
+    contains cargo.toml
+    as many binary crates, but only one library crate
+
+    if the package directory contains src/lib.rs, the package contains a library crate with the same name as the package, and src/lib.rs is its crate root
+    src/main.rs is the crate root of a binary crate with the same name as the package
+
+    root crate 
+        => src/main.rs or src/lib.rs    => decides whether its binary/library crate
+            => has mod XYZ on which it depends on..     => use keyword.
+                src/XYZ.rs or src/XYZ/mod.rs
+                => submodule works the same way inside the module
+
+    e.g backyard is the name of the package
+
+    backyard    
+    ├── Cargo.lock
+    ├── Cargo.toml
+    └── src
+        ├── garden
+        │   └── vegetables.rs
+        ├── garden.rs
+        └── main.rs
+        bin => binary crates
+        lib => library crates
+
+
+crates
+    binary crate
+    library crate
+                rustc --crate-type lib my_library.rs  => .rlib
+
+            => have declarations of modules    ... 
+            mod garden;
+
+        modules can be declared..
+        1) mode test {
+
+        }
+
+        2) src/test.rs
+
+        3) src/test/mod.rs
+
+modules 
+    pub => public
+
+    paths 
+        absolute
+        relative => self, super
+
+        as keyword:
+            use std::io::Result as IoResult;
+
+    define modules in separate files.
+--------------------------------
+Containers
+
+    let v: Vec<i32> = Vec::new();
+    let mut v = Vec::new();
+    v.push(5);
+
+    //iterate
+    for i in &v {
+        println!("{i}");
+    }
+
+    //mutate...
+    for i in &mut v {
+        *i += 20;
+    }
+
+    let second = &v[1];
+    let op: Option<&i32> = v.get(1);
+    match op {
+        None => println!("the element does not exist"),
+        Some(op) => println!("the number is {}", op),
+    }
+
+    //mutable & immutable reference not allowed 
+    let imm = &v[0];
+    println!("{imm}");
+    v.push(4);
+
+string  
+    &str => slice string, immutable view into UTF-8 string
+            String::as_str()
+
+    String => in std. library, mutable, growable, heap-allocated UTF-8 encoded
+        let mut s = String::new();
+
+        String::from("hello");
+        let s = String.from("hello");
+
+        .to_string();
+        let s = "hello".to_string()
+            //append
+            .push_str("hello");
+            + => concat
+            //format
+            format!("{}-{}", "hello", "world");
+
+        internally, String is a wrapper over vector
+
+        indexing by character is not allowed... since it can cause issues with multi-byte character.
+
+    UTF-8 => a character in UTF-8 can take multiple bytes.
+
+----------------------------------------------
+HashMap<K, V>
+
+    let mut scores: HashMap<String, u32> = HashMap::new();
+    scores.insert(String::from("A"), 1);
+
+    for (key, val) in &scores {
+        println!("{} : {}", key, val);
+    }
+
+    own_test
+        .entry(String::from("A"))
+        .or_insert(String::from("A4"));
+    for (key, val) in &own_test {
+        println!("{} : {}", key, val);
+    }
+
+
+    by default, HashMap uses SipHash hash function
+    https://en.wikipedia.org/wiki/SipHash
+
+-----------------------------------------------------------------------------------
+Error handling
+
+    [profile.release]
+    panic = 'abort'
+
+    panic!("");
+
+    RUST_BACKTRACE=1
+        ==> to get full stack trace
+
+    
+    enum Result<T, E> {
+        Ok(T),
+        Err(E),
+    }
+    
+    match
+        unwrap()
+        unwrap_else
+        except("message...")
+
+
+    unwrap_else
+
+    1) match
+
+    2) unwrap_or_else
+        unwrap gives the value
+        else => error handling
+
+    ---------------------------------------------------
+    propagating errors.
+        OK & Err
+
+        fn divide(num: f64, denom: f64) -> Result<f64, String> {
+            if denom == 0.0 {
+                Err(String::from("denom is zero"))
+            } else {
+                Ok(num / denom)
+            }
+        }
+
+        //using ?    
+        fn using_question(file_name: &str) -> Result<String, io::Error> {
+            let contents = std::fs::read_to_string(file_name)?; // The ? propagates the error if read fails
+            Ok(format!("File contents: {}", contents))
+        }
+
+        main can also return Result
+            Result<(), Box<dyn Error>>
+
+------------------------------------------------------------------------------------------------------------------------------
+traits   
+     the std::process::Termination trait
+     std::cmp::PartialOrd
+
+----------------------------------------------------------------------------------------------------------------------------------
+generics
+    fn get_max<T>( list : &[T]) -> &T where T: PartialOrd {
+        let mut max = &list[0];
+        for i in list {
+            if i > max {
+                max = i;
+            }
+        }
+        max
+    }
+
+
+    structs can be generics
+
+    enums can be generics
+        enum Option<T> {
+            Some(T),
+            None,
+        }
+
+        enum Result<T, E> {
+            Ok(T),
+            Err(E),
+        }
+
+
+    >> generics does not negatively affect performance as compare to concrete types
+
+
+----------------------------------------------------------------------------------------------------------------------------
+trait
+    trait is like interface, or more like abstract class in C++
+
+    pub trait Summary {
+        fn summarize(&self) -> String;
+    }
+
+
+    pub struct NewsArticle {
+        pub headline: String,
+        pub location: String,
+        pub author: String,
+        pub content: String,
+    }
+
+    impl Summary for NewsArticle {
+        fn summarize(&self) -> String {
+            format!("{}, by {} ({})", self.headline, self.author, self.location)
+        }
+    }
+
+================================================================================================================================
+Lifetimes
+
+    Just as functions can accept any type when the signature specifies a generic type parameter, 
+        functions can accept references with any lifetime by specifying a generic lifetime parameter.
+
+    &i32        // a reference
+    &'a i32     // a reference with an explicit lifetime
+    &'a mut i32 // a mutable reference with an explicit lifetime
+
