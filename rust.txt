@@ -95,12 +95,25 @@ creating & running new projects
     cargo build
     cargo build --release  
         >> for release builds
-    
+            Cargo.toml
+
+            [profile.dev]
+            opt-level = 0
+
+            [profile.release]
+            opt-level = 3
+
     cargo run
 
     cargo doc --open
         creates documentation, including all the dependencies
 
+    publishing to crates.io
+        cargo login
+        cargo publish
+        cargo yank 
+
+    cargo install
 ---------------------------------
 Data types
 Scalars => integers, floating point, numbers, booleans, characters
@@ -333,6 +346,20 @@ references
         => many readonly references can be had
 
         => if there is a mutable &, there can be only 1 including read-only ref.
+
+    refrences borrow the value from the actual objects
+
+-------------------------------------------------------------------------------------------
+Smart pointers
+    String
+    Vect<T>
+    Box<T>
+    ref<T>
+
+    Implemented as structs
+        drop
+        Deref
+
 
 ---------------
 slices
