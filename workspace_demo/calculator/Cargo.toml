@@ -1,0 +1,9 @@
+[package]
+name = "calculator"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+add = {path = "../add"}
+multiply = {path = "../multiply"}
+
