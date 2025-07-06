@@ -43,6 +43,69 @@ impl DatabaseManager {
         }
         Ok(securities)
     }
+
+    pub fn insert_security(
+        &self,
+        security: &entities::Security,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let rows_affected = self.conn.execute(
+            "insert into security(ticker, fin_type, geo, geo_2) values(?1, ?2, ?3, ?4)",
+            params![
+                security.ticker,
+                security.fin_type,
+                security.geo,
+                security.geo_2
+            ], // Parameters go here
+        )?;
+        Ok(())
+    }
+
+    pub fn delete_security(&self, ticker: &String) -> Result<(), Box<dyn std::error::Error>> {
+        let rows_affected = self.conn.execute(
+            "delete from security where ticker = ?1",
+            params![ticker], // Parameters go here
+        )?;
+        Ok(())
+    }
+
+    pub fn delete_all_security(&self) -> Result<(), Box<dyn std::error::Error>> {
+        let rows_affected = self.conn.execute("delete from security", [])?;
+        Ok(())
+    }
+
+    pub fn delete_pf_data(&self, ticker: &String) -> Result<(), Box<dyn std::error::Error>> {
+        let rows_affected = self.conn.execute(
+            "delete from pf_holding where security_id = (select security_id from security where ticker = ?1)",
+            params![ticker], // Parameters go here
+        )?;
+        Ok(())
+    }
+
+    pub fn delete_all_pf_data(&self) -> Result<(), Box<dyn std::error::Error>> {
+        let rows_affected = self.conn.execute("delete from pf_holding", [])?;
+        Ok(())
+    }
+
+    pub fn insert_pf_holding(
+        &self,
+        security: &entities::SecuritySpecificInfo,
+        sec_id: i32,
+    ) -> Result<usize, Box<dyn std::error::Error>> {
+        println!("insert {:?} {:?}", security, sec_id);
+        let rows_affected = self.conn.execute(
+            "insert into pf_holding(pf_id, security_id, market_value, today_pl, today_percent_pl, pl, percent_pl) values(?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+            params![
+                security.portfolio,
+                sec_id,
+                security.market_value,
+                security.today_pl,
+                security.today_percent_pl,
+                security.pl,
+                security.percent_pl
+            ], // Parameters go here
+        )?;
+        Ok(rows_affected)
+    }
 }
 
 #[cfg(test)]

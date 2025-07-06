@@ -5,4 +5,4 @@ edition = "2024"
 
 [dependencies]
 trading_ops = {path = "../trading_ops"}
-
+lettre = "0.5"

@@ -3,7 +3,7 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct Security {
-    pub id: i64,
+    pub id: Option<i32>,
     pub ticker: String,
     pub fin_type: i32,
     pub geo: i32,
@@ -21,6 +21,19 @@ impl Security {
         })
     }
 }
+
+#[derive(Debug, Deserialize)]
+pub struct SecuritySpecificInfo {
+    pub portfolio: String,
+    pub ticker: String,
+    pub market_value: Option<f32>,
+    pub today_pl: Option<f32>,
+    pub today_percent_pl: Option<f32>,
+    pub pl: Option<f32>,
+    pub percent_pl: Option<f32>
+}
+
+impl SecuritySpecificInfo {}
 
 #[cfg(test)]
 mod tests {
